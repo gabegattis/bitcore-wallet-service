@@ -23,7 +23,7 @@ function openDb(cb) {
     return cb();
   };
   return cb();
-};
+}
 
 
 function resetDb(cb) {
@@ -31,7 +31,7 @@ function resetDb(cb) {
   db.dropDatabase(function(err) {
     return cb();
   });
-};
+}
 
 
 describe('Storage', function() {
@@ -66,7 +66,7 @@ describe('Storage', function() {
           w.m.should.equal(wallet.m);
           w.n.should.equal(wallet.n);
           done();
-        })
+        });
       });
     });
     it('should not return error if wallet not found', function(done) {
@@ -106,7 +106,7 @@ describe('Storage', function() {
           lookup.requestPubKeys[0].key.should.equal('requestPubKey 1');
           lookup.requestPubKeys[0].signature.should.equal('xxx');
           done();
-        })
+        });
       });
     });
     it('should not return error if copayer not found', function(done) {
@@ -148,7 +148,7 @@ describe('Storage', function() {
             creatorId: wallet.copayers[0].id,
             amount: i + 100,
           });
-          if (i % 2 == 0) {
+          if (i % 2 === 0) {
             tx.status = 'rejected';
             tx.isPending().should.be.false;
           }
@@ -210,6 +210,160 @@ describe('Storage', function() {
             }).should.be.false;
             done();
           });
+        });
+      });
+    });
+  });
+
+  describe('storeWalletTransaction', function() {
+    it('should store the walletTransaction', function(done) {
+      var params = {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
+        blockHeight: 12345
+      };
+
+      var walletTransaction = Model.WalletTransaction.create(params);
+
+      storage.storeWalletTransaction(walletTransaction, function(err) {
+        if (err) {
+          throw err;
+        }
+        should.not.exist(err);
+        db.collection(Storage.collections.WALLET_TRANSACTIONS).find({}).toArray(function(err, walletTransactions) {
+          if (err) {
+            throw err;
+          }
+          should.not.exist(err);
+          should.exist(walletTransactions);
+          walletTransactions.length.should.equal(1);
+          delete walletTransactions[0]._id; // we don't care about checking the _id
+          walletTransactions[0].should.deep.equal(params);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('findWalletTransaction', function() {
+    var transactionParams = [
+      {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff9',
+        blockHeight: 3
+      },
+      {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff0',
+        blockHeight: 2
+      },
+      {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff1',
+        blockHeight: 1
+      },
+      {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
+        blockHeight: 4
+      },
+      {
+        address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
+        walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8aa',//different id, should not be in results
+        txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ffa',
+        blockHeight: 4
+      }
+    ];
+
+    var transactions = [
+      Model.WalletTransaction.create(transactionParams[3]), // height 4
+      Model.WalletTransaction.create(transactionParams[0]), // height 3
+      Model.WalletTransaction.create(transactionParams[1]), // height 2
+      Model.WalletTransaction.create(transactionParams[2]), // height 1
+    ];
+
+    function createWalletTransactions(walletTransactions, callback) {
+      async.eachSeries(walletTransactions, createWalletTransaction, callback);
+
+      function createWalletTransaction(walletTransactionParams, callback) {
+        var walletTransaction = Model.WalletTransaction.create(walletTransactionParams);
+        storage.storeWalletTransaction(walletTransaction, callback);
+      }
+    }
+
+    it('should handle mongo error', function(done) {
+      var sandbox = sinon.sandbox.create();
+
+      var Cursor = require('../node_modules/tingodb/lib/tcursor');
+
+      var ta = sandbox.stub(Cursor.prototype, 'toArray', function(callback) {
+        callback(new Error('this is an error'));
+      });
+
+      storage.findWalletTransactions('58b90ad7-454b-4df0-be99-ed4ede0be8a9', 0, 10, function(err, walletTransactions) {
+        should.exist(err);
+        should.not.exist(walletTransactions);
+        err.should.be.an.instanceOf(Error);
+        err.message.should.equal('this is an error');
+        sandbox.restore();
+        done();
+      });
+    });
+
+    it('should find the transactions for this wallet id', function(done) {
+      createWalletTransactions(transactionParams, function(err) {
+        should.not.exist(err);
+        storage.findWalletTransactions('58b90ad7-454b-4df0-be99-ed4ede0be8a9', 0, 10, function(err, walletTransactions) {
+          should.not.exist(err);
+          should.exist(walletTransactions);
+          walletTransactions.should.deep.equal(transactions);
+          done();
+        });
+      });
+    });
+
+    it('should find the transactions for this wallet id with different paging', function(done) {
+      createWalletTransactions(transactionParams, function(err) {
+        should.not.exist(err);
+        storage.findWalletTransactions('58b90ad7-454b-4df0-be99-ed4ede0be8a9', 2, 2, function(err, walletTransactions) {
+          should.not.exist(err);
+          should.exist(walletTransactions);
+          walletTransactions.should.deep.equal([
+            transactions[2],
+            transactions[3]
+          ]);
+          done();
+        });
+      });
+    });
+
+    it('should find the transactions for the other wallet id', function(done) {
+      createWalletTransactions(transactionParams, function(err) {
+        should.not.exist(err);
+        storage.findWalletTransactions('58b90ad7-454b-4df0-be99-ed4ede0be8aa', 0, 10, function(err, walletTransactions) {
+          should.not.exist(err);
+          should.exist(walletTransactions);
+          walletTransactions.should.deep.equal([
+            Model.WalletTransaction.create(transactionParams[4])
+          ]);
+          done();
+        });
+      });
+    });
+
+    it('should find nothing for a wallet with no txs', function(done) {
+      createWalletTransactions(transactionParams, function(err) {
+        should.not.exist(err);
+        storage.findWalletTransactions('58b90ad7-454b-4df0-be99-ed0000000000', 0, 10, function(err, walletTransactions) {
+          should.not.exist(err);
+          should.exist(walletTransactions);
+          walletTransactions.should.deep.equal([]);
+          done();
         });
       });
     });
