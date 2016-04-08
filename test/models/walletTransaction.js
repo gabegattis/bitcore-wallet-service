@@ -34,7 +34,8 @@ describe('WalletTransaction', function() {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
-        blockHeight: 12345
+        blockHeight: 12345,
+        receiving: false
       };
 
       var walletTransaction = WalletTransaction.create(params);
@@ -237,13 +238,80 @@ describe('WalletTransaction', function() {
     });
   });
 
+  describe('_validateReceiving', function() {
+    it('should accept true', function() {
+      WalletTransaction._validateReceiving(true);
+    });
+
+    it('should accept false', function() {
+      WalletTransaction._validateReceiving(false);
+    });
+
+    it('should throw if receiving is "true"', function() {
+      function validate() {
+        WalletTransaction._validateReceiving('true');
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is "false"', function() {
+      function validate() {
+        WalletTransaction._validateReceiving('false');
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is a number', function() {
+      function validate() {
+        WalletTransaction._validateReceiving(21);
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is a string', function() {
+      function validate() {
+        WalletTransaction._validateReceiving('foo');
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is null', function() {
+      function validate() {
+        WalletTransaction._validateReceiving(null);
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is undefined', function() {
+      function validate() {
+        WalletTransaction._validateReceiving(undefined);
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+
+    it('should throw if receiving is {}', function() {
+      function validate() {
+        WalletTransaction._validateReceiving({});
+      }
+
+      validate.should.throw(Error, 'receiving must be a boolean');
+    });
+  });
+
   describe('toObject', function() {
     it('should create a simple object from the walletTransaction', function() {
       var walletTransaction = WalletTransaction.create({
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
-        blockHeight: 12345
+        blockHeight: 12345,
+        receiving: true
       });
 
       var object = walletTransaction.toObject();
@@ -253,7 +321,8 @@ describe('WalletTransaction', function() {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
-        blockHeight: 12345
+        blockHeight: 12345,
+        receiving: true
       });
     });
   });
