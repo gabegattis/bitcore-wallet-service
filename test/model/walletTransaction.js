@@ -50,15 +50,6 @@ describe('WalletTransaction', function() {
   });
 
   describe('_validateOptions', function() {
-    var sandbox;
-    beforeEach(function() {
-      sandbox = sinon.sandbox.create();
-    });
-
-    afterEach(function() {
-      sandbox.restore();
-    });
-
     it('should throw if params is null', function() {
       var params = null;
 
@@ -224,6 +215,14 @@ describe('WalletTransaction', function() {
     it('should throw if blockHeight is infinity', function() {
       function validate() {
         WalletTransaction._validateBlockHeight(Infinity);
+      }
+
+      validate.should.throw(Error, 'invalid blockHeight');
+    });
+
+    it('should throw if blockHeight is not an integer', function() {
+      function validate() {
+        WalletTransaction._validateBlockHeight(12345.6789);
       }
 
       validate.should.throw(Error, 'invalid blockHeight');

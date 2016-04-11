@@ -221,7 +221,8 @@ describe('Storage', function() {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
-        blockHeight: 12345
+        blockHeight: 12345,
+        receiving: true
       };
 
       var walletTransaction = Model.WalletTransaction.create(params);
@@ -252,31 +253,36 @@ describe('Storage', function() {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff9',
-        blockHeight: 3
+        blockHeight: 3,
+        receiving: true
       },
       {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff0',
-        blockHeight: 2
+        blockHeight: 2,
+        receiving: true
       },
       {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff1',
-        blockHeight: 1
+        blockHeight: 1,
+        receiving: true
       },
       {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
-        blockHeight: 4
+        blockHeight: 4,
+        receiving: true
       },
       {
         address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8aa',//different id, should not be in results
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ffa',
-        blockHeight: 4
+        blockHeight: 4,
+        receiving: true
       }
     ];
 
