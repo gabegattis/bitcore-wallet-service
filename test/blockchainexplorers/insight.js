@@ -18,14 +18,14 @@ describe('Insight', function() {
     });
 
     it('should handle request error', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(new Error('this is an error'));
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(new Error('this is an error'));
       });
 
       insight.getRawBlock(406016, function(err, rawBlock) {
@@ -33,23 +33,23 @@ describe('Insight', function() {
         should.not.exist(rawBlock);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should handle non-200 status code', function(done) {
-      var errorMessage = 'FLAGRANT SYSTEM ERROR\n\nThe system is down. I dunno what\nyou did, moron, but you sure\n' +
-        'screwed everything up good.';
-
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 999}, errorMessage);
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var errorMessage = 'FLAGRANT SYSTEM ERROR\n\nThe system is down. I dunno what\nyou did, moron, but you sure\n' +
+        'screwed everything up good.';
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 999}, errorMessage);
       });
 
       insight.getRawBlock(406016, function(err, rawBlock) {
@@ -57,20 +57,20 @@ describe('Insight', function() {
         should.not.exist(rawBlock);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('999 status code: ' + errorMessage);
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should handle no rawblock in reponse', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {not: 'rawBlock'});
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 200}, {not: 'rawBlock'});
       });
 
       insight.getRawBlock(406016, function(err, rawBlock) {
@@ -78,47 +78,47 @@ describe('Insight', function() {
         should.not.exist(rawBlock);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('no rawblock in response from insight');
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should get the raw block with a block hash', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
       });
 
       insight.getRawBlock('000000000000000000dcdef6f6ce78f882da11d16e1bef4d0bf5affaf7acf501', function(err, rawBlock) {
         should.not.exist(err);
         should.exist(rawBlock);
         rawBlock.should.equal(RAW_BLOCK_HEX);
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should get the raw block with a block height', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
       });
 
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
+      });
+
       insight.getRawBlock(406016, function(err, rawBlock) {
         should.not.exist(err);
         should.exist(rawBlock);
         rawBlock.should.equal(RAW_BLOCK_HEX);
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
@@ -233,15 +233,15 @@ describe('Insight', function() {
       sandbox.restore();
     });
 
-    it('should handle requestList error', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(new Error('this is an error'));
-      });
-
+    it('should handle request error', function(done) {
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(new Error('this is an error'));
       });
 
       insight.getInfo(function(err, info) {
@@ -249,20 +249,20 @@ describe('Insight', function() {
         should.not.exist(info);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should handle non-200 status code', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 12345}, 'FLAGRANT SYSTEM ERROR\n\nComputer over.\nVirus = Very Yes.');
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 12345}, 'FLAGRANT SYSTEM ERROR\n\nComputer over.\nVirus = Very Yes.');
       });
 
       insight.getInfo(function(err, info) {
@@ -270,20 +270,20 @@ describe('Insight', function() {
         should.not.exist(info);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('12345 status code: FLAGRANT SYSTEM ERROR\n\nComputer over.\nVirus = Very Yes.');
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
 
     it('should handle no info in body', function(done) {
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {not: 'info'});
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
+      });
+
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 200}, {not: 'info'});
       });
 
       insight.getInfo(function(err, info) {
@@ -291,7 +291,7 @@ describe('Insight', function() {
         should.not.exist(info);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('no info in response from insight');
-        rl.callCount.should.equal(1);
+        _d.callCount.should.equal(1);
         done();
       });
     });
@@ -317,24 +317,23 @@ describe('Insight', function() {
         }
       };
 
-      var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, response);
-      });
-
       var insight = new Insight({
         network: 'livenet',
         url: 'https://insight.bitpay.com',
         apiPrefix: '/api'
       });
 
+      var _d = sandbox.stub(insight, '_doRequest', function(options, callback) {
+        callback(null, {statusCode: 200}, response);
+      });
+
       insight.getInfo(function(err, info) {
         should.not.exist(err);
         should.exist(info);
         info.should.equal(response.info);
-        rl.callCount.should.equal(1);
-        rl.args[0][0].should.deep.equal({
+        _d.callCount.should.equal(1);
+        _d.args[0][0].should.deep.equal({
           method: 'GET',
-          hosts: 'https://insight.bitpay.com',
           path: '/api/status',
           qs: {
             q: 'getInfo'

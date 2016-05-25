@@ -76,6 +76,13 @@ var config = {
   //    testnet: 'https://test-insight.bitpay.com/tx/{{txid}}',
   //  },
   //},
+  //
+  // To use sendgrid:
+  // var sgTransport = require('nodemail-sendgrid-transport');
+  // mailer:sgTransport({
+  //  api_user: xxx,
+  //  api_key: xxx,
+  // });
 
 };
 module.exports = config;
