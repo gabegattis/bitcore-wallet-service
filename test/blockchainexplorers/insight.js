@@ -62,7 +62,7 @@ describe('Insight', function() {
       });
     });
 
-    it('should handle no rawBlock in reponse', function(done) {
+    it('should handle no rawblock in reponse', function(done) {
       var rl = sandbox.stub(requestList, 'request', function(options, callback) {
         callback(null, {statusCode: 200}, {not: 'rawBlock'});
       });
@@ -77,7 +77,7 @@ describe('Insight', function() {
         should.exist(err);
         should.not.exist(rawBlock);
         err.should.be.an.instanceOf(Error);
-        err.message.should.equal('no rawBlock in response from insight');
+        err.message.should.equal('no rawblock in response from insight');
         rl.callCount.should.equal(1);
         done();
       });
@@ -85,7 +85,7 @@ describe('Insight', function() {
 
     it('should get the raw block with a block hash', function(done) {
       var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {rawBlock: RAW_BLOCK_HEX});
+        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
       });
 
       var insight = new Insight({
@@ -105,7 +105,7 @@ describe('Insight', function() {
 
     it('should get the raw block with a block height', function(done) {
       var rl = sandbox.stub(requestList, 'request', function(options, callback) {
-        callback(null, {statusCode: 200}, {rawBlock: RAW_BLOCK_HEX});
+        callback(null, {statusCode: 200}, {rawblock: RAW_BLOCK_HEX});
       });
 
       var insight = new Insight({

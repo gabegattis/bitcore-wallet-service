@@ -177,7 +177,7 @@ describe('BlockDriver Integration Test', function() {
     db.collection('addresses').insert(GABES_TEST_ADDRESS, callback);
   }
 
-  it('should ', function(done) {
+  xit('should ', function(done) {
     this.timeout(99999999);
     // stub out calls to insight
     // create wallet and addresses

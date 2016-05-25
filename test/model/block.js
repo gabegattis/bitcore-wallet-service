@@ -294,6 +294,112 @@ describe('Block', function() {
     });
   });
 
+  describe('_validateAction', function() {
+    it('should allow undefined', function() {
+      Block._validateAction();
+    });
+
+    it('should allow "adding"', function() {
+      Block._validateAction('adding');
+    });
+
+    it('should allow "removing"', function() {
+      Block._validateAction('removing');
+    });
+
+    it('should throw with invalid action', function() {
+      function validate() {
+        Block._validateAction('thisIsNotAnAction');
+      }
+
+      validate.should.throw(Error, 'invalid action');
+    });
+
+    it('should throw with non-string values', function() {
+      var values = [
+        null,
+        true,
+        12345,
+        {},
+        [],
+        new Date()
+      ];
+
+      function validate(value) {
+        return function() {
+          Block._validateAction(value);
+        };
+      }
+
+      for (var i = 0; i < values.length; i++) {
+        var value = values[i];
+        validate(value).should.throw(Error, 'action must be a string');
+      }
+    });
+  });
+
+  describe('_validateFinished', function() {
+    it('should accept true', function() {
+      Block._validateFinished(true);
+    });
+
+    it('should accept false', function() {
+      Block._validateFinished(false);
+    });
+
+    it('should throw if finished is "true"', function() {
+      function validate() {
+        Block._validateFinished('true');
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+
+    it('should throw if finished is "false"', function() {
+      function validate() {
+        Block._validateFinished('false');
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+
+    it('should throw if finished is a number', function() {
+      function validate() {
+        Block._validateFinished(21);
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+
+    it('should throw if finished is a string', function() {
+      function validate() {
+        Block._validateFinished('foo');
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+
+    it('should throw if finished is null', function() {
+      function validate() {
+        Block._validateFinished(null);
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+
+    it('should allow undefined', function() {
+      Block._validateFinished(undefined);
+    });
+
+    it('should throw if finished is {}', function() {
+      function validate() {
+        Block._validateFinished({});
+      }
+
+      validate.should.throw(Error, 'finished must be a boolean');
+    });
+  });
+
   describe('toObject', function() { // add status
     it('should create a simple object from the walletTransaction', function() {
       var block = Block.create({
