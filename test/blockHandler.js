@@ -58,9 +58,8 @@ describe('BlockHandler', function() {
       block.height = 406016;
 
       var blockHandler = new BlockHandler({
-        storage: {
-          db: 'foo'
-        }
+        storage: new Storage(),
+        network: 'livenet'
       });
 
       blockHandler.handleAddBlock(block, function(err) {
@@ -84,9 +83,8 @@ describe('BlockHandler', function() {
       block.height = 406016;
 
       var blockHandler = new BlockHandler({
-        storage: {
-          db: 'foo'
-        }
+        storage: new Storage(),
+        network: 'livenet'
       });
 
       var cw = sandbox.stub(blockHandler, 'createWalletTransaction', function(options, callback) {
@@ -119,9 +117,8 @@ describe('BlockHandler', function() {
       block.height = 406016;
 
       var blockHandler = new BlockHandler({
-        storage: {
-          db: 'foo'
-        }
+        storage: new Storage(),
+        network: 'livenet'
       });
 
       blockHandler.handleAddBlock(block, function(err) {
@@ -133,63 +130,72 @@ describe('BlockHandler', function() {
           walletId: '0',
           txid: '44a08a1c6a9dd4a2257ca72858ac009b0f2ac8070ce68b87a3642259b74fd32c',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[1][0].should.deep.equal(WalletTransaction.create({
           address: '1LBirB1dBCoXb7btHoU6Fxc46dkSegiqFN',
           walletId: '0',
           txid: 'b99ce953704b42ffeffc90ed2238277a31d8d91693f0e76f9b95baead8a79188',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[2][0].should.deep.equal(WalletTransaction.create({
           address: '38ZQf7oz9B25LUsRHaguWXSeV94MMDSMvK',
           walletId: '1',
           txid: '43f5a08e05faee88000a2c63d9379e6da7be41aaa847a2138670c77224b3f46a',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[3][0].should.deep.equal(WalletTransaction.create({
           address: '38ZQf7oz9B25LUsRHaguWXSeV94MMDSMvK',
           walletId: '1',
           txid: '43f5a08e05faee88000a2c63d9379e6da7be41aaa847a2138670c77224b3f46a',
           blockHeight: 406016,
-          receiving: false
+          receiving: false,
+          network: 'livenet'
         }));
         sw.args[4][0].should.deep.equal(WalletTransaction.create({
           address: '13AfVbCHNa2mJp7UkpNFH2xioURmjBCLKW',
           walletId: '2',
           txid: '97136965c2b9594cff04d0ebd1016e18d5ea27be71e86ebf7ddfafae1da78827',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[5][0].should.deep.equal(WalletTransaction.create({
           address: '1Bc9cXVZo2D3dG1YB7wqEBdE3H34ovheRm',
           walletId: '3',
           txid: 'f6f98cec4ca876b6df2bf9355ee1c838beac8d9023c3b1cdd4a438c64a29d9ec',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[6][0].should.deep.equal(WalletTransaction.create({
           address: '1Bc9cXVZo2D3dG1YB7wqEBdE3H34ovheRm',
           walletId: '3',
           txid: '0929e7f70f66cc5c73ff6324b8ce0ba78b3fd402c60b0bc6662f80c287b495ec',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[7][0].should.deep.equal(WalletTransaction.create({
           address: '1Bc9cXVZo2D3dG1YB7wqEBdE3H34ovheRm',
           walletId: '3',
           txid: 'bc39eec80c2fb15d0eef48bfe091b3b1e4f0cf840cc2f254c5b63968b31238b4',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sw.args[8][0].should.deep.equal(WalletTransaction.create({
           address: '1TrumpveJrAYhsmuU2FdeMy48wuvQswKn',
           walletId: '4',
           txid: '6221042565ceae1606e2b9db58ab689b6f20ac8e487a6343e65eef435edf73e5',
           blockHeight: 406016,
-          receiving: true
+          receiving: true,
+          network: 'livenet'
         }));
         sandbox.restore();
         done();

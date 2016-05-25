@@ -41,35 +41,40 @@ var TRANSACTION_PARAMS = [
     walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
     txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff9',
     blockHeight: 3,
-    receiving: true
+    receiving: true,
+    network: 'testnet'
   },
   {
     address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
     walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
     txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff0',
     blockHeight: 2,
-    receiving: true
+    receiving: true,
+    network: 'testnet'
   },
   {
     address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
     walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
     txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff1',
     blockHeight: 1,
-    receiving: true
+    receiving: true,
+    network: 'testnet'
   },
   {
     address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
     walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
     txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
     blockHeight: 4,
-    receiving: true
+    receiving: true,
+    network: 'testnet'
   },
   {
     address: 'mt3yHNTkWSgP6abwHcRQwzk8Ef4Y6m5eaL',
     walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8aa',//different id, should not be in results
     txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ffa',
     blockHeight: 4,
-    receiving: true
+    receiving: true,
+    network: 'testnet'
   }
 ];
 
@@ -84,22 +89,26 @@ var BLOCK_PARAMS = [
   {
     height: 4,
     hash: '000000004ebadb55ee9096c9a2f8880e09da59c0d68b1c228da88e48844a1485',
-    previousHash: '0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449'
+    previousHash: '0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449',
+    network: 'testnet'
   },
   {
     height: 3,
     hash: '0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449',
-    previousHash: '000000006a625f06636b8bb6ac7b960a8d03705d1ace08b1a19da3fdcc99ddbd'
+    previousHash: '000000006a625f06636b8bb6ac7b960a8d03705d1ace08b1a19da3fdcc99ddbd',
+    network: 'testnet'
   },
   {
     height: 2,
     hash: '000000006a625f06636b8bb6ac7b960a8d03705d1ace08b1a19da3fdcc99ddbd',
-    previousHash: '00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048'
+    previousHash: '00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048',
+    network: 'testnet'
   },
   {
     height: 1,
     hash: '00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048',
-    previousHash: '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f'
+    previousHash: '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
+    network: 'testnet'
   }
 ];
 
@@ -310,7 +319,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       };
 
       var walletTransaction = Model.WalletTransaction.create(params);
@@ -340,7 +350,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       };
 
       var walletTransaction = Model.WalletTransaction.create(params);
@@ -367,7 +378,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       };
 
       var params2 = {
@@ -375,7 +387,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: false
+        receiving: false,
+        network: 'testnet'
       };
 
       var walletTransaction1 = Model.WalletTransaction.create(params1);
@@ -405,7 +418,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       };
 
       var params2 = {
@@ -413,7 +427,8 @@ describe('Storage', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a9',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       };
 
       var walletTransaction1 = Model.WalletTransaction.create(params1);
@@ -537,7 +552,7 @@ describe('Storage', function() {
         callback(new Error('this is an error'));
       });
 
-      storage.removeWalletTransactionsAtBlockHeight(4, function(err) {
+      storage.removeWalletTransactionsAtBlockHeight(4, 'testnet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -550,7 +565,7 @@ describe('Storage', function() {
     it('should remove the walletTransactions at the given block height', function(done) {
       createWalletTransactions(TRANSACTION_PARAMS, function(err) {
         should.not.exist(err);
-        storage.removeWalletTransactionsAtBlockHeight(4, function(err) {
+        storage.removeWalletTransactionsAtBlockHeight(4, 'testnet', function(err) {
           should.not.exist(err);
           storage.db.collection(WalletTransactions).find().toArray(function(err, walletTransactions) {
             should.not.exist(err);
@@ -572,7 +587,22 @@ describe('Storage', function() {
     it('should not remove any transactions if there are none at the given block height', function(done) {
       createWalletTransactions(TRANSACTION_PARAMS, function(err) {
         should.not.exist(err);
-        storage.removeWalletTransactionsAtBlockHeight(99999999999999999, function(err) {
+        storage.removeWalletTransactionsAtBlockHeight(99999999999999999, 'testnet', function(err) {
+          should.not.exist(err);
+          storage.db.collection(WalletTransactions).count(function(err, count) {
+            should.not.exist(err);
+            should.exist(count);
+            count.should.equal(TRANSACTION_PARAMS.length);
+            done();
+          });
+        });
+      });
+    });
+
+    it('should not remove an documents when called with a different network', function(done) {
+      createWalletTransactions(TRANSACTION_PARAMS, function(err) {
+        should.not.exist(err);
+        storage.removeWalletTransactionsAtBlockHeight(4, 'livenet', function(err) {
           should.not.exist(err);
           storage.db.collection(WalletTransactions).count(function(err, count) {
             should.not.exist(err);
@@ -602,7 +632,7 @@ describe('Storage', function() {
         callback(new Error('this is an error'));
       });
 
-      storage.getLatestBlock(function(err) {
+      storage.getLatestBlock('livenet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -615,7 +645,7 @@ describe('Storage', function() {
     it('should get the latest block', function(done) {
       storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
         should.not.exist(err);
-        storage.getLatestBlock(function(err, block) {
+        storage.getLatestBlock('testnet', function(err, block) {
           should.not.exist(err);
           should.exist(block);
           block.should.deep.equal(BLOCKS[0]);
@@ -624,8 +654,19 @@ describe('Storage', function() {
       });
     });
 
+    it('should get nothing if called with a different network', function(done) {
+      storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
+        should.not.exist(err);
+        storage.getLatestBlock('livenet', function(err, block) {
+          should.not.exist(err);
+          should.not.exist(block);
+          done();
+        });
+      });
+    });
+
     it('should get nothing if there are no blocks in the db', function(done) {
-      storage.getLatestBlock(function(err, block) {
+      storage.getLatestBlock('livenet', function(err, block) {
         should.not.exist(err);
         should.not.exist(block);
         done();
@@ -650,7 +691,7 @@ describe('Storage', function() {
         callback(new Error('this is an error'));
       });
 
-      storage.deleteBlock(4, function(err) {
+      storage.deleteBlock(4, 'testnet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -663,7 +704,7 @@ describe('Storage', function() {
     it('should delete the block at the given block height', function(done) {
       storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
         should.not.exist(err);
-        storage.deleteBlock(3, function(err) {
+        storage.deleteBlock(3, 'testnet', function(err) {
           should.not.exist(err);
           storage.db.collection(Blocks).findOne({height: 3}, function(err, block) {
             should.not.exist(err);
@@ -671,6 +712,24 @@ describe('Storage', function() {
             storage.db.collection(Blocks).count({}, function(err, count) {
               should.not.exist(err);
               count.should.equal(BLOCK_PARAMS.length - 1);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it('should not delete the block if called with a differen network', function(done) {
+      storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
+        should.not.exist(err);
+        storage.deleteBlock(3, 'livenet', function(err) {
+          should.not.exist(err);
+          storage.db.collection(Blocks).findOne({height: 3}, function(err, block) {
+            should.not.exist(err);
+            should.exist(block);
+            storage.db.collection(Blocks).count({}, function(err, count) {
+              should.not.exist(err);
+              count.should.equal(BLOCK_PARAMS.length);
               done();
             });
           });
@@ -696,7 +755,7 @@ describe('Storage', function() {
         callback(new Error('this is an error'));
       });
 
-      storage.finishBlock(4, function(err) {
+      storage.finishBlock(4, 'testnet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -711,7 +770,7 @@ describe('Storage', function() {
         should.not.exist(err);
         storage.db.collection(Blocks).update({height: 4}, {$set: {action: 'removing', finished: false}}, function(err) {
           should.not.exist(err);
-          storage.finishBlock(4, function(err) {
+          storage.finishBlock(4, 'testnet', function(err) {
             should.not.exist(err);
             storage.db.collection(Blocks).findOne({height: 4}, function(err, block) {
               should.not.exist(err);
@@ -729,12 +788,30 @@ describe('Storage', function() {
         should.not.exist(err);
         storage.db.collection(Blocks).update({height: 4}, {$set: {action: 'adding', finished: false}}, function(err) {
           should.not.exist(err);
-          storage.finishBlock(4, function(err) {
+          storage.finishBlock(4, 'testnet', function(err) {
             should.not.exist(err);
             storage.db.collection(Blocks).findOne({height: 4}, function(err, block) {
               should.not.exist(err);
               should.exist(block);
               block.finished.should.equal(true);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+    it('should do nothing if called with a differen network', function(done) {
+      storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
+        should.not.exist(err);
+        storage.db.collection(Blocks).update({height: 4}, {$set: {action: 'adding', finished: false}}, function(err) {
+          should.not.exist(err);
+          storage.finishBlock(4, 'livenet', function(err) {
+            should.not.exist(err);
+            storage.db.collection(Blocks).findOne({height: 4}, function(err, block) {
+              should.not.exist(err);
+              should.exist(block);
+              block.finished.should.equal(false);
               done();
             });
           });
@@ -760,7 +837,7 @@ describe('Storage', function() {
         callback(new Error('this is an error'));
       });
 
-      storage.startRemovingBlock(4, function(err) {
+      storage.startRemovingBlock(4, 'testnet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -773,13 +850,38 @@ describe('Storage', function() {
     it('should set action to "removing" and finished to false', function(done) {
       storage.db.collection(Blocks).insert(BLOCK_PARAMS, function(err) {
         should.not.exist(err);
-        storage.startRemovingBlock(4, function(err) {
+        storage.startRemovingBlock(4, 'testnet', function(err) {
           should.not.exist(err);
           storage.db.collection(Blocks).findOne({height: 4}, function(err, block) {
             should.not.exist(err);
             should.exist(block);
             block.action.should.equal('removing');
             block.finished.should.equal(false);
+            done();
+          });
+        });
+      });
+    });
+
+    it('should do nothing if called with a different network', function(done) {
+      var blockParam = {
+        height: 4,
+        hash: '000000004ebadb55ee9096c9a2f8880e09da59c0d68b1c228da88e48844a1485',
+        previousHash: '0000000082b5015589a3fdf2d4baff403e6f0be035a5d9742c1cae6295464449',
+        network: 'testnet',
+        action: 'adding',
+        finished: true
+      };
+
+      storage.db.collection(Blocks).insert(blockParam, function(err) {
+        should.not.exist(err);
+        storage.startRemovingBlock(4, 'livenet', function(err) {
+          should.not.exist(err);
+          storage.db.collection(Blocks).findOne({height: 4}, function(err, block) {
+            should.not.exist(err);
+            should.exist(block);
+            block.action.should.equal('adding');
+            block.finished.should.equal(true);
             done();
           });
         });
@@ -807,7 +909,7 @@ describe('Storage', function() {
       var bitcoreBlock = bitcore.Block.fromString(RAW_BLOCK_HEX);
       bitcoreBlock.height = 406016;
 
-      storage.addBlock(bitcoreBlock, function(err) {
+      storage.addBlock(bitcoreBlock, 'livenet', function(err) {
         should.exist(err);
         err.should.be.an.instanceOf(Error);
         err.message.should.equal('this is an error');
@@ -821,7 +923,7 @@ describe('Storage', function() {
       var bitcoreBlock = bitcore.Block.fromString(RAW_BLOCK_HEX);
       bitcoreBlock.height = 406016;
 
-      storage.addBlock(bitcoreBlock, function(err) {
+      storage.addBlock(bitcoreBlock, 'livenet', function(err) {
         should.not.exist(err);
         storage.db.collection(Blocks).findOne({height: 406016}, function(err, block) {
           should.not.exist(err);
@@ -832,7 +934,8 @@ describe('Storage', function() {
             previousHash: '000000000000000004da3b4a07c9e93117e1fe19dec422d82dc801b465b636ff',
             height: 406016,
             action: 'adding',
-            finished: false
+            finished: false,
+            network: 'livenet'
           });
           done();
         });
@@ -843,9 +946,9 @@ describe('Storage', function() {
       var bitcoreBlock = bitcore.Block.fromString(RAW_BLOCK_HEX);
       bitcoreBlock.height = 406016;
 
-      storage.addBlock(bitcoreBlock, function(err) {
+      storage.addBlock(bitcoreBlock, 'livenet', function(err) {
         should.not.exist(err);
-        storage.addBlock(bitcoreBlock, function(err) {
+        storage.addBlock(bitcoreBlock, 'livenet', function(err) {
           should.not.exist(err);
           storage.db.collection(Blocks).find({height: 406016}).toArray(function(err, blocks) {
             should.not.exist(err);
@@ -857,7 +960,8 @@ describe('Storage', function() {
               previousHash: '000000000000000004da3b4a07c9e93117e1fe19dec422d82dc801b465b636ff',
               height: 406016,
               action: 'adding',
-              finished: false
+              finished: false,
+              network: 'livenet'
             });
             done();
           });

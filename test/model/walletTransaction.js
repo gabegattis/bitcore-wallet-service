@@ -3,6 +3,7 @@
 var chai = require('chai');
 var should = chai.should();
 var sinon = require('sinon');
+var bitcore = require('bitcore-lib');
 
 var WalletTransaction = require('../../lib/model/walletTransaction');
 
@@ -35,7 +36,8 @@ describe('WalletTransaction', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: false
+        receiving: false,
+        network: 'testnet'
       };
 
       var walletTransaction = WalletTransaction.create(params);
@@ -72,7 +74,7 @@ describe('WalletTransaction', function() {
   describe('_validateAddress', function() {
     it('should throw if no address', function() {
       function validate() {
-        WalletTransaction._validateAddress();
+        WalletTransaction._validateAddress(undefined, 'livenet');
       }
 
       validate.should.throw(Error, 'address is a required parameter');
@@ -80,7 +82,7 @@ describe('WalletTransaction', function() {
 
     it('should throw if address is not a string', function() {
       function validate() {
-        WalletTransaction._validateAddress(123456);
+        WalletTransaction._validateAddress(123456, 'testnet');
       }
 
       validate.should.throw(Error, 'address must be a string');
@@ -88,26 +90,60 @@ describe('WalletTransaction', function() {
 
     it('should throw if throw if address is invalid', function() {
       function validate() {
-        WalletTransaction._validateAddress('thisIsNotABitcoinAddress');
+        WalletTransaction._validateAddress('thisIsNotABitcoinAddress', 'testnet');
       }
 
       validate.should.throw(Error, 'invalid address');
     });
 
     it('should allow a testnet address', function() {
-      WalletTransaction._validateAddress('mx6sbEmboZW2LfngaTE2zDY925yothVB5p');
+      WalletTransaction._validateAddress('mx6sbEmboZW2LfngaTE2zDY925yothVB5p', 'testnet');
     });
 
     it('should allow a testnet p2sh address', function() {
-      WalletTransaction._validateAddress('2Mx3TZycg4XL5sQFfERBgNmg9Ma7uxowK9y');
+      WalletTransaction._validateAddress('2Mx3TZycg4XL5sQFfERBgNmg9Ma7uxowK9y', 'testnet');
     });
 
     it('should allow a livenet address', function() {
-      WalletTransaction._validateAddress('1GVEUcQUVSekkK9k9CSLMyDatTQUncVMPP');
+      WalletTransaction._validateAddress('1GVEUcQUVSekkK9k9CSLMyDatTQUncVMPP', 'livenet');
     });
 
     it('should allow a livenet p2sh address', function() {
-      WalletTransaction._validateAddress('36myJEA85CzDE229AbFifdP2rPdX2FGbSq');
+      WalletTransaction._validateAddress('36myJEA85CzDE229AbFifdP2rPdX2FGbSq', 'livenet');
+    });
+
+    it('should throw if throw if given a valid address but the wrong network', function() {
+      function validate() {
+        WalletTransaction._validateAddress('1GVEUcQUVSekkK9k9CSLMyDatTQUncVMPP', 'testnet');
+      }
+
+      validate.should.throw(Error, 'invalid address');
+    });
+
+    it('should allow an address from an added network', function() {
+      var basketballNet = {
+        name: 'basketballnet',
+        alias: 'basketballnet',
+        pubkeyhash: 0x23, // different value here gives us different looking address
+        privatekey: 0xef,
+        scripthash: 0xc4,
+        xpubkey: 0x043587cf,
+        xprivkey: 0x04358394,
+        networkMagic: 0x000ba11a,
+        port: 18333,
+        dnsSeeds: [
+          'basketballnet-seed.bitcoin.petertodd.org',
+          'basketballnet-seed.bluematt.me',
+          'basketballnet-seed.alexykot.me',
+          'basketballnet-seed.bitcoin.schildbach.de'
+        ]
+      };
+
+      bitcore.Networks.add(basketballNet);
+
+      var address = 'FTNQFU5YV2ydNdPgTtWjfZNPGRYCoYUtfE';
+      WalletTransaction._validateAddress(address, 'basketballnet');
+      bitcore.Networks.remove(bitcore.Networks.get('basketballnet'));
     });
   });
 
@@ -303,6 +339,70 @@ describe('WalletTransaction', function() {
     });
   });
 
+  describe('_validateNetwork', function() {
+    it('should throw if no network', function() {
+      function validate() {
+        WalletTransaction._validateNetwork();
+      }
+
+      validate.should.throw(Error, 'network is a required parameter');
+    });
+
+    it('should allow "livenet"', function() {
+      WalletTransaction._validateNetwork('livenet');
+    });
+
+    it('should allow "mainnet"', function() {
+      WalletTransaction._validateNetwork('mainnet');
+    });
+
+    it('should allow "testnet"', function() {
+      WalletTransaction._validateNetwork('testnet');
+    });
+
+    it('should throw with invalid network', function() {
+      function validate() {
+        WalletTransaction._validateNetwork('basketballnet');
+      }
+
+      validate.should.throw(Error, 'invalid network');
+    });
+
+    it('should throw if network is a bitcore network object (not a string)', function() {
+      function validate() {
+        var testnet = bitcore.Networks.get('testnet');
+        WalletTransaction._validateNetwork(testnet);
+      }
+
+      validate.should.throw(Error, 'network must be a string');
+    });
+
+    it('should allow added network', function() {
+      var basketballNet = {
+        name: 'basketballnet',
+        alias: 'basketballnet',
+        pubkeyhash: 0x6f,
+        privatekey: 0xef,
+        scripthash: 0xc4,
+        xpubkey: 0x043587cf,
+        xprivkey: 0x04358394,
+        networkMagic: 0x0b110907,
+        port: 18333,
+        dnsSeeds: [
+          'basketballnet-seed.bitcoin.petertodd.org',
+          'basketballnet-seed.bluematt.me',
+          'basketballnet-seed.alexykot.me',
+          'basketballnet-seed.bitcoin.schildbach.de'
+        ]
+      };
+
+      bitcore.Networks.add(basketballNet);
+
+      WalletTransaction._validateNetwork('basketballnet');
+      bitcore.Networks.remove(bitcore.Networks.get('basketballnet'));
+    });
+  });
+
   describe('toObject', function() {
     it('should create a simple object from the walletTransaction', function() {
       var walletTransaction = WalletTransaction.create({
@@ -310,7 +410,8 @@ describe('WalletTransaction', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       });
 
       var object = walletTransaction.toObject();
@@ -321,7 +422,8 @@ describe('WalletTransaction', function() {
         walletId: '58b90ad7-454b-4df0-be99-ed4ede0be8a8',
         txid: '2eed0538ef9d83b4906901069247f494daf1d45fa22df287ac329af1802e3ff8',
         blockHeight: 12345,
-        receiving: true
+        receiving: true,
+        network: 'testnet'
       });
     });
   });

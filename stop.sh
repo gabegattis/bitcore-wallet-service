@@ -7,7 +7,7 @@ stop_program ()
   echo "Stopping Process - $pidfile. PID=$(cat $pidfile)"
   kill -9 $(cat $pidfile)
   rm $pidfile
-  
+
 }
 
 stop_program pids/bws.pid
@@ -17,4 +17,4 @@ stop_program pids/bcmonitor.pid
 stop_program pids/pushnotificationsservice.pid
 stop_program pids/messagebroker.pid
 stop_program pids/locker.pid
-
+stop_program pids/transactionHistoryService.pid

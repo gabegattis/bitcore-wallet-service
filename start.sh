@@ -36,4 +36,4 @@ run_program emailservice/emailservice.js pids/emailservice.pid logs/emailservice
 run_program pushnotificationsservice/pushnotificationsservice.js pids/pushnotificationsservice.pid logs/pushnotificationsservice.log
 run_program fiatrateservice/fiatrateservice.js pids/fiatrateservice.pid logs/fiatrateservice.log
 run_program bws.js pids/bws.pid logs/bws.log
-
+run_program transactionHistoryService/transactionHistoryService.js pids/transactionHistoryService.pid logs/transactionHistoryService.log

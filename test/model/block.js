@@ -3,6 +3,7 @@
 var chai = require('chai');
 var should = chai.should();
 var sinon = require('sinon');
+var bitcore = require('bitcore-lib');
 
 var Block = require('../../lib/model/block');
 
@@ -34,6 +35,7 @@ describe('Block', function() {
         hash: '0000000000000000059ad0d7e9dd0997533598882011cd5c047871a16b1a6ea7',
         previousHash: '000000000000000000cd925927aa1f8efa86a188dafe467eb0f535c8150fc041',
         height: 406831,
+        network: 'livenet'
       };
 
       var block = Block.create(params);
@@ -70,6 +72,7 @@ describe('Block', function() {
         hash: '000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f',
         previousHash: '000000000000000000cd925927aa1f8efa86a188dafe467eb0f535c8150fc041',
         height: 0,
+        network: 'livenet'
       };
 
       function validate() {
@@ -84,6 +87,7 @@ describe('Block', function() {
         hash: '0000000000000000059ad0d7e9dd0997533598882011cd5c047871a16b1a6ea7',
         previousHash: '0000000000000000059ad0d7e9dd0997533598882011cd5c047871a16b1a6ea7',
         height: 406831,
+        network: 'livenet'
       };
 
       function validate() {
@@ -226,12 +230,77 @@ describe('Block', function() {
     });
   });
 
+  describe('_validateNetwork', function() {
+    it('should throw if no network', function() {
+      function validate() {
+        Block._validateNetwork();
+      }
+
+      validate.should.throw(Error, 'network is a required parameter');
+    });
+
+    it('should allow "livenet"', function() {
+      Block._validateNetwork('livenet');
+    });
+
+    it('should allow "mainnet"', function() {
+      Block._validateNetwork('mainnet');
+    });
+
+    it('should allow "testnet"', function() {
+      Block._validateNetwork('testnet');
+    });
+
+    it('should throw with invalid network', function() {
+      function validate() {
+        Block._validateNetwork('basketballnet');
+      }
+
+      validate.should.throw(Error, 'invalid network');
+    });
+
+    it('should throw if network is a bitcore network object (not a string)', function() {
+      function validate() {
+        var testnet = bitcore.Networks.get('testnet');
+        Block._validateNetwork(testnet);
+      }
+
+      validate.should.throw(Error, 'network must be a string');
+    });
+
+    it('should allow added network', function() {
+      var basketballNet = {
+        name: 'basketballnet',
+        alias: 'basketballnet',
+        pubkeyhash: 0x6f,
+        privatekey: 0xef,
+        scripthash: 0xc4,
+        xpubkey: 0x043587cf,
+        xprivkey: 0x04358394,
+        networkMagic: 0x0b110907,
+        port: 18333,
+        dnsSeeds: [
+          'basketballnet-seed.bitcoin.petertodd.org',
+          'basketballnet-seed.bluematt.me',
+          'basketballnet-seed.alexykot.me',
+          'basketballnet-seed.bitcoin.schildbach.de'
+        ]
+      };
+
+      bitcore.Networks.add(basketballNet);
+
+      Block._validateNetwork('basketballnet');
+      bitcore.Networks.remove(bitcore.Networks.get('basketballnet'));
+    });
+  });
+
   describe('toObject', function() { // add status
     it('should create a simple object from the walletTransaction', function() {
       var block = Block.create({
         hash: '0000000000000000059ad0d7e9dd0997533598882011cd5c047871a16b1a6ea7',
         previousHash: '000000000000000000cd925927aa1f8efa86a188dafe467eb0f535c8150fc041',
         height: 406831,
+        network: 'livenet'
       });
 
       var object = block.toObject();
@@ -241,6 +310,7 @@ describe('Block', function() {
         hash: '0000000000000000059ad0d7e9dd0997533598882011cd5c047871a16b1a6ea7',
         previousHash: '000000000000000000cd925927aa1f8efa86a188dafe467eb0f535c8150fc041',
         height: 406831,
+        network: 'livenet'
       });
     });
   });
